@@ -1,4 +1,4 @@
-res://edgerunner.tscn
+res://player.tscn
+res://player.gd
 res://node_2d.tscn
 res://mob.tscn
-res://player.tscn
