@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=3 uid="uid://dojgkitpq1ml1"]
+
+[ext_resource type="Texture2D" uid="uid://mdund1lng8me" path="res://arrow.png" id="1_mo72m"]
+
+[sub_resource type="GDScript" id="GDScript_lpq2r"]
+script/source = "extends RigidBody2D
+
+
+func _ready():
+	var mob_types = $AnimatedSprite2D.sprite_frames.get_animation_names()
+	$AnimatedSprite2D.play(mob_types[randi() % mob_types.size()])
+
+
+func _on_area_2d_area_entered(area: Area2D) :
+	print(\"Przegrales\")
+
+
+func _on_area_2d_body_entered(body: Node2D) :
+	pass # Replace with function body.
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kul3q"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_mo72m")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ml817"]
+size = Vector2(10.3236, 7.10061)
+
+[sub_resource type="GDScript" id="GDScript_2yvlg"]
+script/source = "extends VisibleOnScreenNotifier2D
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x2ral"]
+size = Vector2(48.5218, 43.381)
+
+[node name="Main" type="Node2D"]
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+position = Vector2(-92, 27)
+rotation = -5.75958
+gravity_scale = 0.0
+script = SubResource("GDScript_lpq2r")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RigidBody2D"]
+position = Vector2(0.114269, -57.8013)
+scale = Vector2(0.0961816, 0.116354)
+sprite_frames = SubResource("SpriteFrames_kul3q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+position = Vector2(2.84632, -57.0692)
+rotation = 2.80353
+shape = SubResource("RectangleShape2D_ml817")
+
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D/CollisionShape2D"]
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="RigidBody2D"]
+position = Vector2(0.114262, -57.8013)
+scale = Vector2(2.16279, 1.78036)
+script = SubResource("GDScript_2yvlg")
+
+[node name="Area2D" type="Area2D" parent="RigidBody2D"]
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D/Area2D"]
+position = Vector2(3.71234, -57.5693)
+shape = SubResource("RectangleShape2D_x2ral")
+
+[connection signal="area_entered" from="RigidBody2D/Area2D" to="RigidBody2D" method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="RigidBody2D/Area2D" to="RigidBody2D" method="_on_area_2d_area_entered"]

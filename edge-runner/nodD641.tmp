@@ -1,15 +1,45 @@
-[gd_scene load_steps=8 format=4 uid="uid://d1fdplshirsgf"]
+[gd_scene load_steps=17 format=4 uid="uid://d1fdplshirsgf"]
 
+[ext_resource type="Texture2D" uid="uid://faxynxdopgbx" path="res://characterSprite.png" id="1_1rdnc"]
 [ext_resource type="Texture2D" uid="uid://c32ihkuvkmvxq" path="res://Ground.png" id="2_jpvk3"]
 [ext_resource type="Texture2D" uid="uid://bgp6drspc5mn2" path="res://tilesets/walls/walls.png" id="3_r8uvi"]
-[ext_resource type="PackedScene" uid="uid://c8lfmcflrcsld" path="res://player.tscn" id="4_0ppor"]
-[ext_resource type="PackedScene" uid="uid://dojgkitpq1ml1" path="res://mob.tscn" id="4_dtjys"]
+[ext_resource type="Texture2D" uid="uid://mdund1lng8me" path="res://arrow.png" id="4_jcmck"]
+
+[sub_resource type="GDScript" id="GDScript_na5p1"]
+script/source = "extends CharacterBody2D
+
+@export var speed = 400
+
+func get_input():
+	var input_direction = Input.get_vector(\"left\", \"right\", \"up\", \"down\")
+	velocity = input_direction * speed
+
+func _physics_process(delta):
+	get_input()
+	move_and_slide()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ngdqf"]
+size = Vector2(36, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ubt68"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1rdnc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_518dv"]
+size = Vector2(40, 43.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1tm15"]
 size = Vector2(165, 20)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cd6y2"]
-resource_name = "<null>"
 texture = ExtResource("3_r8uvi")
 0:0/0 = 0
 1:0/0 = 0
@@ -47,7 +77,71 @@ texture = ExtResource("3_r8uvi")
 terrain_set_0/mode = 1
 sources/1 = SubResource("TileSetAtlasSource_cd6y2")
 
-[node name="main scene" type="Node2D"]
+[sub_resource type="GDScript" id="GDScript_qlse2"]
+script/source = "extends RigidBody2D
+
+
+func _ready():
+	var mob_types = $AnimatedSprite2D.sprite_frames.get_animation_names()
+	$AnimatedSprite2D.play(mob_types[randi() % mob_types.size()])
+
+
+func _on_area_2d_area_entered(area: Area2D) :
+	print(\"Przegrales\")
+
+
+func _on_area_2d_body_entered(body: Node2D) :
+	pass # Replace with function body.
+
+
+
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8uexn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_jcmck")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e8tvt"]
+size = Vector2(10.3236, 7.10061)
+
+[sub_resource type="GDScript" id="GDScript_iama8"]
+script/source = "extends VisibleOnScreenNotifier2D
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4eqym"]
+size = Vector2(48.5218, 43.381)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+collision_layer = 7
+collision_mask = 7
+motion_mode = 1
+script = SubResource("GDScript_na5p1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(0, 15)
+shape = SubResource("RectangleShape2D_ngdqf")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
+position = Vector2(0.5, 1)
+scale = Vector2(0.289063, 0.289063)
+sprite_frames = SubResource("SpriteFrames_ubt68")
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D"]
+position = Vector2(-3, 11.75)
+shape = SubResource("RectangleShape2D_518dv")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2(0, 54)
@@ -69,6 +163,36 @@ texture = ExtResource("2_jpvk3")
 tile_map_data = PackedByteArray("AAAEAAIAAQADAAQAAAADAAIAAQACAAQAAAACAAIAAQACAAQAAAABAAIAAQACAAQAAAAAAAIAAQACAAQAAAD//wIAAQACAAQAAAD+/wIAAQACAAQAAAD9/wIAAQACAAQAAAD8/wIAAQACAAQAAAD7/wIAAQACAAQAAAD6/wIAAQACAAQAAAD5/wIAAQABAAQAAAADAAEAAQACAAQAAAACAAEAAQACAAQAAAABAAEAAQACAAQAAAAAAAEAAQACAAQAAAD//wEAAQACAAQAAAD+/wEAAQACAAQAAAD9/wEAAQACAAQAAAD8/wEAAQACAAQAAAD7/wEAAQACAAQAAAD6/wEAAQACAAQAAAD6/wAAAQACAAQAAAD7/wAAAQACAAQAAAD8/wAAAQACAAQAAAD9/wAAAQACAAQAAAD+/wAAAQACAAQAAAD//wAAAQACAAQAAAAAAAAAAQACAAQAAAABAAAAAQACAAQAAAACAAAAAQACAAQAAAACAP//AQACAAQAAAABAP//AQACAAQAAAAAAP//AQACAAQAAAD/////AQACAAQAAAD+////AQACAAQAAAD9////AQACAAQAAAD8////AQACAAQAAAD7////AQACAAQAAAD6////AQACAAQAAAADAP//AQACAAQAAAADAAAAAQACAAQAAAAEAAEAAQADAAQAAAAEAAAAAQADAAQAAAAEAP//AQADAAQAAAD5/wEAAQACAAQAAAD5/wAAAQABAAQAAAD5////AQABAAQAAAD5/wMAAQACAAQAAAD6/wMAAQACAAQAAAD6/wQAAQACAAQAAAD5/wQAAQACAAQAAAD7/wQAAQACAAQAAAD8/wQAAQACAAQAAAD9/wQAAQACAAQAAAD+/wQAAQACAAQAAAD//wQAAQACAAQAAAAAAAQAAQACAAQAAAABAAQAAQACAAQAAAACAAQAAQACAAQAAAADAAQAAQACAAQAAAAEAAQAAQACAAQAAAAEAAUAAQACAAQAAAADAAUAAQACAAQAAAACAAUAAQACAAQAAAABAAUAAQACAAQAAAAAAAUAAQACAAQAAAAAAAYAAQACAAQAAAD//wYAAQACAAQAAAD+/wYAAQACAAQAAAD9/wYAAQACAAQAAAD8/wYAAQACAAQAAAD7/wUAAQACAAQAAAD6/wUAAQACAAQAAAD6/wYAAQACAAQAAAD5/wYAAQACAAQAAAD5/wUAAQACAAQAAAD//wUAAQACAAQAAAD+/wUAAQACAAQAAAD9/wUAAQACAAQAAAD8/wUAAQACAAQAAAD7/wYAAQACAAQAAAD4/wYAAQACAAQAAAD3/wYAAQACAAQAAAD2/wcAAQACAAQAAAD2/wYAAQACAAQAAAABAAYAAQACAAQAAAACAAYAAQACAAQAAAADAAYAAQACAAQAAAADAAcAAQACAAQAAAAEAAcAAQACAAQAAAAEAAYAAQACAAQAAAAFAAYAAQACAAQAAAAGAAYAAQACAAQAAAAGAAcAAQACAAQAAAAFAAcAAQACAAQAAAACAAcAAQACAAQAAAABAAgAAQACAAQAAAAAAAgAAQACAAQAAAD//wgAAQACAAQAAAD+/wgAAQACAAQAAAD9/wgAAQACAAQAAAD8/wgAAQACAAQAAAD7/wgAAQACAAQAAAD6/wgAAQACAAQAAAD5/wgAAQACAAQAAAD4/wgAAQACAAQAAAD3/wgAAQACAAQAAAD2/wgAAQACAAQAAAD1/wgAAQACAAQAAAD0/wgAAQACAAQAAADz/wgAAQACAAQAAADz/wcAAQACAAQAAAD0/wYAAQACAAQAAAD1/wUAAQACAAQAAAD1/wQAAQACAAQAAAD2/wMAAQACAAQAAAD3/wIAAQACAAQAAAD4/wIAAQACAAQAAAABAAMAAQACAAQAAAACAAMAAQACAAQAAAACAAgAAQACAAQAAAABAAkAAQACAAQAAAAAAAkAAQACAAQAAAD5/wcAAQACAAQAAAD4/wcAAQACAAQAAAD2/wUAAQACAAQAAAD2/wQAAQACAAQAAAD3/wMAAQACAAQAAAD4/wMAAQACAAQAAAABAAcAAQACAAQAAAAAAAcAAQACAAQAAAD//wcAAQACAAQAAAD+/wcAAQACAAQAAAD6/wcAAQACAAQAAAD7/wcAAQACAAQAAAD8/wcAAQACAAQAAAD9/wcAAQACAAQAAAD1/wYAAQACAAQAAAD4/wQAAQACAAQAAAD4/wUAAQACAAQAAAD3/wQAAQACAAQAAAD3/wUAAQACAAQAAAD3/wcAAQACAAQAAAD0/wcAAQACAAQAAAD1/wcAAQACAAQAAAADAAgAAQACAAQAAAAEAAgAAQACAAQAAAAFAAgAAQACAAQAAAAGAAgAAQACAAQAAAAHAAcAAQACAAQAAAAHAAYAAQACAAQAAAAHAAUAAQACAAQAAAAGAAUAAQACAAQAAAAGAAQAAQACAAQAAAAHAAgAAQACAAQAAAAHAAQAAQACAAQAAAAGAAMAAQACAAQAAAAFAAMAAQACAAQAAAAFAAQAAQACAAQAAAAFAAUAAQACAAQAAAAHAAMAAQACAAQAAAAHAAIAAQACAAQAAAAHAAEAAQACAAQAAAAGAAEAAQACAAQAAAAGAAIAAQACAAQAAAAFAAIAAQACAAQAAAAFAAEAAQACAAQAAAAFAAAAAQACAAQAAAAFAP//AQACAAQAAAAGAP//AQACAAQAAAAHAP//AQACAAQAAAAHAAAAAQACAAQAAAAGAAAAAQACAAQAAAD4////AQACAAQAAAD3////AQACAAQAAAD2////AQACAAQAAAD1////AQACAAQAAAD0////AQACAAQAAADz////AQACAAQAAADz/wAAAQACAAQAAADz/wEAAQACAAQAAADz/wIAAQACAAQAAADz/wMAAQACAAQAAADz/wQAAQACAAQAAADz/wUAAQACAAQAAADz/wYAAQACAAQAAADz/wkAAQACAAQAAAD0/wkAAQACAAQAAAD1/wkAAQACAAQAAAD2/wkAAQACAAQAAAD3/wkAAQACAAQAAAD4/wkAAQACAAQAAAD5/wkAAQACAAQAAAD6/wkAAQACAAQAAAD7/wkAAQACAAQAAAD8/wkAAQACAAQAAAD9/wkAAQACAAQAAAD+/wkAAQACAAQAAAD//wkAAQACAAQAAAACAAkAAQACAAQAAAADAAkAAQACAAQAAAAEAAkAAQACAAQAAAAFAAkAAQACAAQAAAAGAAkAAQACAAQAAAAHAAkAAQACAAQAAAD4/wAAAQACAAQAAAD3/wAAAQACAAQAAAD2/wAAAQACAAQAAAD1/wAAAQACAAQAAAD0/wAAAQACAAQAAAD0/wEAAQACAAQAAAD0/wIAAQACAAQAAAD0/wMAAQACAAQAAAD0/wQAAQACAAQAAAD0/wUAAQACAAQAAAD1/wMAAQACAAQAAAD1/wIAAQACAAQAAAD1/wEAAQACAAQAAAD2/wEAAQACAAQAAAD3/wEAAQACAAQAAAD4/wEAAQACAAQAAAD2/wIAAQACAAQAAAA=")
 tile_set = SubResource("TileSet_fajle")
 
-[node name="mob" parent="." instance=ExtResource("4_dtjys")]
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+position = Vector2(-92, 27)
+rotation = -5.75958
+gravity_scale = 0.0
+script = SubResource("GDScript_qlse2")
 
-[node name="player" parent="." instance=ExtResource("4_0ppor")]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RigidBody2D"]
+position = Vector2(0.114269, -57.8013)
+scale = Vector2(0.0961816, 0.116354)
+sprite_frames = SubResource("SpriteFrames_8uexn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+position = Vector2(2.84632, -57.0692)
+rotation = 2.80353
+shape = SubResource("RectangleShape2D_e8tvt")
+
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D/CollisionShape2D"]
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="RigidBody2D"]
+position = Vector2(0.114262, -57.8013)
+scale = Vector2(2.16279, 1.78036)
+script = SubResource("GDScript_iama8")
+
+[node name="Area2D" type="Area2D" parent="RigidBody2D"]
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D/Area2D"]
+position = Vector2(3.71234, -57.5693)
+shape = SubResource("RectangleShape2D_4eqym")
+
+[connection signal="area_entered" from="RigidBody2D/Area2D" to="RigidBody2D" method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="RigidBody2D/Area2D" to="RigidBody2D" method="_on_area_2d_area_entered"]
