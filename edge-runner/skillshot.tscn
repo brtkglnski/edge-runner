@@ -1,8 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://ck5vka8knf5en"]
+[gd_scene load_steps=5 format=3 uid="uid://bmc1chmkmd245"]
 
 [ext_resource type="Texture2D" uid="uid://mdund1lng8me" path="res://arrow.png" id="1_1i412"]
 
-[sub_resource type="GDScript" id="GDScript_hv1cp"]
+[sub_resource type="GDScript" id="GDScript_5lfrh"]
 script/source = "extends RigidBody2D
 
 
@@ -11,73 +11,58 @@ func _ready():
 	$AnimatedSprite2D.play(mob_types[randi() % mob_types.size()])
 
 
-func _on_area_2d_area_entered(area: Area2D) :
-	print(\"Przegrales\")
-
-
-func _on_area_2d_body_entered(body: Node2D) :
-	pass # Replace with function body.
-
-
 func _on_visible_on_screen_notifier_2d_screen_exited():
 	queue_free()
+
+
+func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
+	pass # Replace with function body.
 "
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_wh76r"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_4sve5"]
 animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_1i412")
 }],
 "loop": true,
-"name": &"default",
-"speed": 5.0
+"name": &"fly",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1i412")
+}],
+"loop": true,
+"name": &"swim",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1i412")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 3.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ks22n"]
-size = Vector2(10.3236, 7.10061)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1jnx8"]
 
-[sub_resource type="GDScript" id="GDScript_3mups"]
-script/source = "extends VisibleOnScreenNotifier2D
-"
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xe7hs"]
-size = Vector2(48.5218, 43.381)
-
-[node name="Skillshot" type="Node2D"]
-
-[node name="Mob" type="RigidBody2D" parent="."]
-position = Vector2(-92, 27)
-rotation = -5.75958
+[node name="Mob" type="RigidBody2D"]
 collision_mask = 0
 gravity_scale = 0.0
-script = SubResource("GDScript_hv1cp")
+script = SubResource("GDScript_5lfrh")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Mob"]
-position = Vector2(0.114269, -57.8013)
-scale = Vector2(0.0961816, 0.116354)
-sprite_frames = SubResource("SpriteFrames_wh76r")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-9, -8)
+sprite_frames = SubResource("SpriteFrames_4sve5")
+animation = &"fly"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Mob"]
-position = Vector2(2.84632, -57.0692)
-rotation = 2.80353
-shape = SubResource("RectangleShape2D_ks22n")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1jnx8")
 
-[node name="Sprite2D" type="Sprite2D" parent="Mob/CollisionShape2D"]
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+position = Vector2(1.50001, -4)
+scale = Vector2(6.05, 2.5)
 
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="Mob"]
-position = Vector2(0.114262, -57.8013)
-scale = Vector2(2.16279, 1.78036)
-script = SubResource("GDScript_3mups")
-
-[node name="Area2D" type="Area2D" parent="Mob"]
-collision_layer = 7
-collision_mask = 7
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Mob/Area2D"]
-position = Vector2(3.71234, -57.5693)
-shape = SubResource("RectangleShape2D_xe7hs")
-
-[connection signal="screen_exited" from="Mob/VisibleOnScreenNotifier2D" to="Mob" method="_on_visible_on_screen_notifier_2d_screen_exited"]
-[connection signal="area_entered" from="Mob/Area2D" to="Mob" method="_on_area_2d_area_entered"]
-[connection signal="body_entered" from="Mob/Area2D" to="Mob" method="_on_area_2d_area_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]

@@ -1,11 +1,12 @@
-AnimatedSprite2D
+VisibleOnScreenEnabler2D
 CollisionShape2D
+AnimatedSprite2D
+RigidBody2D
 Area2D
 TileMapLayer
 Node2D
 Sprite2D
 VisibleOnScreenNotifier2D
-RigidBody2D
 Line2D
 ParallaxLayer
 ParallaxBackground

@@ -1,15 +1,64 @@
-[gd_scene load_steps=5 format=3 uid="uid://3evl0umasdj7"]
+[gd_scene load_steps=5 format=3 uid="uid://dojgkitpq1ml1"]
 
-[ext_resource type="PackedScene" uid="uid://d36d8erofqqi6" path="res://player.tscn" id="1_pghex"]
-[ext_resource type="PackedScene" path="res://skillshot.tscn" id="2_ja6sp"]
+[ext_resource type="PackedScene" uid="uid://c8lfmcflrcsld" path="res://player.tscn" id="1_pghex"]
+[ext_resource type="PackedScene" uid="uid://bmc1chmkmd245" path="res://skillshot.tscn" id="2_ja6sp"]
 
 [sub_resource type="GDScript" id="GDScript_fwfer"]
 script/source = "extends Node2D
 
 
 
-@export var mob_scene: PackedScene
+@export var mob: PackedScene
 var score
+
+
+func _ready():
+	new_game()
+
+
+func game_over():
+	$ScoreTimer.stop()
+	$MobTimer.stop()
+
+func new_game():
+	score = 0
+	$Player.start($StartPosition.position)
+	$StartTimer.start()
+
+
+func _on_mob_timer_timeout() -> void:
+# Create a new instance of the Mob scene.
+	var mob = mob.instantiate()
+
+	# Choose a random location on Path2D.
+	var mob_spawn_location = $MobPath/mobSpawnLocation
+	mob_spawn_location.progress_ratio = randf()
+
+	# Set the mob's direction perpendicular to the path direction.
+	var direction = mob_spawn_location.rotation + PI / 2
+
+	# Set the mob's position to a random location.
+	mob.position = mob_spawn_location.position
+
+	# Add some randomness to the direction.
+	direction += randf_range(-PI / 4, PI / 4)
+	mob.rotation = direction
+
+	# Choose the velocity for the mob.
+	var velocity = Vector2(randf_range(150.0, 250.0), 0.0)
+	mob.linear_velocity = velocity.rotated(direction)
+
+	# Spawn the mob by adding it to the Main scene.
+	add_child(mob)
+
+func _on_score_timer_timeout():
+	score += 1
+	$MobTimer.start()
+	$ScoreTimer.start()
+
+func _on_start_timer_timeout() -> void:
+	pass # Replace with function body.
+	
 "
 
 [sub_resource type="Curve2D" id="Curve2D_rj2s4"]
@@ -20,12 +69,15 @@ point_count = 6
 
 [node name="Main" type="Node2D"]
 script = SubResource("GDScript_fwfer")
+mob = ExtResource("2_ja6sp")
+
+[node name="Player" parent="." instance=ExtResource("1_pghex")]
 
 [node name="StartPosition" type="Marker2D" parent="."]
-position = Vector2(240, 450)
 
 [node name="MobTimer" type="Timer" parent="."]
 wait_time = 0.5
+autostart = true
 
 [node name="ScoreTimer" type="Timer" parent="."]
 
@@ -38,8 +90,7 @@ curve = SubResource("Curve2D_rj2s4")
 
 [node name="mobSpawnLocation" type="PathFollow2D" parent="MobPath"]
 
-[node name="Player" parent="." instance=ExtResource("1_pghex")]
-visible = false
-
-[node name="Skillshot" parent="." instance=ExtResource("2_ja6sp")]
-position = Vector2(63, 27)
+[connection signal="hit" from="Player" to="." method="game_over"]
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
