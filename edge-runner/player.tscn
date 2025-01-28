@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c8lfmcflrcsld"]
+[gd_scene load_steps=28 format=3 uid="uid://c8lfmcflrcsld"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_mjl1n"]
 [ext_resource type="Texture2D" uid="uid://bfsvu44263rta" path="res://pixil-frame-0-0.png" id="2_p4dgr"]
@@ -16,7 +16,15 @@
 [ext_resource type="Texture2D" uid="uid://1lsbuevan80t" path="res://pixil-frame-5.png" id="8_o4a3g"]
 [ext_resource type="Texture2D" uid="uid://fyr7e737xujl" path="res://pixil-frame-7-7.png" id="9_db8sf"]
 [ext_resource type="Texture2D" uid="uid://c05urbd0tngo4" path="res://pixil-frame-6.png" id="9_dlfk1"]
+[ext_resource type="Texture2D" uid="uid://hcmjsfyesj6x" path="res://pixilart-framesuwu/up1.png" id="10_imsnx"]
 [ext_resource type="Texture2D" uid="uid://b1ph1a2lsr0aj" path="res://pixil-frame-7.png" id="10_s3wl4"]
+[ext_resource type="Texture2D" uid="uid://dl5rsqdlwep78" path="res://pixilart-framesuwu/up2.png" id="11_aqp4m"]
+[ext_resource type="Texture2D" uid="uid://dkn8hy7rybhsl" path="res://pixilart-framesuwu/up3.png" id="12_mxnei"]
+[ext_resource type="Texture2D" uid="uid://d0wx674agfpqk" path="res://pixilart-framesuwu/up4.png" id="13_3yenr"]
+[ext_resource type="Texture2D" uid="uid://c1s08bbndc1bl" path="res://pixilart-framesuwu/up5.png" id="14_2k5ki"]
+[ext_resource type="Texture2D" uid="uid://clj1ud7cufxhb" path="res://pixilart-framesuwu/up6.png" id="15_g2gts"]
+[ext_resource type="Texture2D" uid="uid://b2s4med5enxkv" path="res://pixilart-framesuwu/up7.png" id="16_hhdly"]
+[ext_resource type="Texture2D" uid="uid://d4ki18o5skaq3" path="res://pixilart-framesuwu/up8.png" id="17_s2a85"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8irit"]
 size = Vector2(3.78098, 11.0141)
@@ -31,22 +39,51 @@ animations = [{
 "texture": ExtResource("4_fedeg")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_dlfk1")
-}, {
-"duration": 1.0,
-"texture": ExtResource("7_c8wdl")
-}, {
-"duration": 1.0,
 "texture": ExtResource("6_70qp5")
-}, {
-"duration": 1.0,
-"texture": ExtResource("8_o4a3g")
 }, {
 "duration": 1.0,
 "texture": ExtResource("5_6l11x")
 }, {
 "duration": 1.0,
+"texture": ExtResource("7_c8wdl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_o4a3g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_dlfk1")
+}, {
+"duration": 1.0,
 "texture": ExtResource("10_s3wl4")
+}],
+"loop": true,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_imsnx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_aqp4m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_mxnei")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_3yenr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_2k5ki")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_g2gts")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_hhdly")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_s2a85")
 }],
 "loop": true,
 "name": &"up",
@@ -96,7 +133,6 @@ shape = SubResource("RectangleShape2D_8irit")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.195313, 0.195313)
 sprite_frames = SubResource("SpriteFrames_2237p")
-animation = &"up"
-frame_progress = 0.6178
+animation = &"down"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
