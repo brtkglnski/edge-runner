@@ -1,77 +1,45 @@
-[gd_scene load_steps=7 format=3 uid="uid://3evl0umasdj7"]
+[gd_scene load_steps=5 format=3 uid="uid://dojgkitpq1ml1"]
 
-[ext_resource type="Texture2D" uid="uid://mdund1lng8me" path="res://arrow.png" id="1_mo72m"]
+[ext_resource type="PackedScene" uid="uid://c8lfmcflrcsld" path="res://player.tscn" id="1_pghex"]
+[ext_resource type="PackedScene" uid="uid://ck5vka8knf5en" path="res://skillshot.tscn" id="2_ja6sp"]
 
-[sub_resource type="GDScript" id="GDScript_lpq2r"]
-script/source = "extends RigidBody2D
-
-
-func _ready():
-	var mob_types = $AnimatedSprite2D.sprite_frames.get_animation_names()
-	$AnimatedSprite2D.play(mob_types[randi() % mob_types.size()])
+[sub_resource type="GDScript" id="GDScript_fwfer"]
+script/source = "extends Node2D
 
 
-func _on_area_2d_area_entered(area: Area2D) :
-	print(\"Przegrales\")
 
-
-func _on_area_2d_body_entered(body: Node2D) :
-	pass # Replace with function body.
+@export var mob_scene: PackedScene
+var score
 "
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_kul3q"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_mo72m")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ml817"]
-size = Vector2(10.3236, 7.10061)
-
-[sub_resource type="GDScript" id="GDScript_2yvlg"]
-script/source = "extends VisibleOnScreenNotifier2D
-"
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_x2ral"]
-size = Vector2(48.5218, 43.381)
+[sub_resource type="Curve2D" id="Curve2D_rj2s4"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1152, 0, 0, 0, 0, 0, 1152, 648, 0, 0, 0, 0, 0, 648, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 6
 
 [node name="Main" type="Node2D"]
+script = SubResource("GDScript_fwfer")
 
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
-position = Vector2(-92, 27)
-rotation = -5.75958
-gravity_scale = 0.0
-script = SubResource("GDScript_lpq2r")
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(240, 450)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RigidBody2D"]
-position = Vector2(0.114269, -57.8013)
-scale = Vector2(0.0961816, 0.116354)
-sprite_frames = SubResource("SpriteFrames_kul3q")
+[node name="MobTimer" type="Timer" parent="."]
+wait_time = 0.5
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
-position = Vector2(2.84632, -57.0692)
-rotation = 2.80353
-shape = SubResource("RectangleShape2D_ml817")
+[node name="ScoreTimer" type="Timer" parent="."]
 
-[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D/CollisionShape2D"]
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
 
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="RigidBody2D"]
-position = Vector2(0.114262, -57.8013)
-scale = Vector2(2.16279, 1.78036)
-script = SubResource("GDScript_2yvlg")
+[node name="MobPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_rj2s4")
 
-[node name="Area2D" type="Area2D" parent="RigidBody2D"]
-collision_layer = 7
-collision_mask = 7
+[node name="mobSpawnLocation" type="PathFollow2D" parent="MobPath"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D/Area2D"]
-position = Vector2(3.71234, -57.5693)
-shape = SubResource("RectangleShape2D_x2ral")
+[node name="Player" parent="." instance=ExtResource("1_pghex")]
+visible = false
 
-[connection signal="area_entered" from="RigidBody2D/Area2D" to="RigidBody2D" method="_on_area_2d_area_entered"]
-[connection signal="body_entered" from="RigidBody2D/Area2D" to="RigidBody2D" method="_on_area_2d_area_entered"]
+[node name="Skillshot" parent="." instance=ExtResource("2_ja6sp")]
+position = Vector2(63, 27)

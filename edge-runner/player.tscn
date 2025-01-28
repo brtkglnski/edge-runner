@@ -1,41 +1,59 @@
-[gd_scene load_steps=5 format=3 uid="uid://d36d8erofqqi6"]
+[gd_scene load_steps=6 format=3 uid="uid://c8lfmcflrcsld"]
 
-[ext_resource type="Script" path="res://player.gd" id="1_mjl1n"]
 [ext_resource type="Texture2D" uid="uid://faxynxdopgbx" path="res://characterSprite.png" id="1_mmnm2"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_ctqgp"]
+[sub_resource type="GDScript" id="GDScript_q4r0r"]
+script/source = "extends CharacterBody2D
+
+@export var speed = 400
+
+func get_input():
+	var input_direction = Input.get_vector(\"left\", \"right\", \"up\", \"down\")
+	velocity = input_direction * speed
+
+func _physics_process(delta):
+	get_input()
+	move_and_slide()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p8bq2"]
+size = Vector2(36, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ik5h7"]
 animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_mmnm2")
 }],
 "loop": true,
-"name": &"up",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_mmnm2")
-}],
-"loop": true,
-"name": &"walk",
+"name": &"default",
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8spcr"]
-size = Vector2(109, 140)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ofbb"]
+size = Vector2(40, 43.5)
 
-[node name="Player" type="Area2D"]
-position = Vector2(1, 0)
-script = ExtResource("1_mjl1n")
-metadata/_edit_group_ = true
+[node name="Node2D" type="Node2D"]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(2, -46)
-sprite_frames = SubResource("SpriteFrames_ctqgp")
-animation = &"up"
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+collision_layer = 7
+collision_mask = 7
+motion_mode = 1
+script = SubResource("GDScript_q4r0r")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_8spcr")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(0, 15)
+shape = SubResource("RectangleShape2D_p8bq2")
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
+position = Vector2(0.5, 1)
+scale = Vector2(0.289063, 0.289063)
+sprite_frames = SubResource("SpriteFrames_ik5h7")
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D"]
+position = Vector2(-3, 11.75)
+shape = SubResource("RectangleShape2D_0ofbb")
