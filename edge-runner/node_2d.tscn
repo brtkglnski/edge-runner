@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://c32ihkuvkmvxq" path="res://Ground.png" id="2_jpvk3"]
 [ext_resource type="Texture2D" uid="uid://bgp6drspc5mn2" path="res://tilesets/walls/walls.png" id="3_r8uvi"]
-[ext_resource type="PackedScene" uid="uid://c8lfmcflrcsld" path="res://player.tscn" id="4_0ppor"]
-[ext_resource type="PackedScene" uid="uid://dojgkitpq1ml1" path="res://mob.tscn" id="4_dtjys"]
+[ext_resource type="PackedScene" uid="uid://d36d8erofqqi6" path="res://player.tscn" id="4_0ppor"]
+[ext_resource type="PackedScene" uid="uid://3evl0umasdj7" path="res://mob.tscn" id="4_dtjys"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1tm15"]
 size = Vector2(165, 20)

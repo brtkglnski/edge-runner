@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dojgkitpq1ml1"]
+[gd_scene load_steps=5 format=3 uid="uid://3evl0umasdj7"]
 
-[ext_resource type="PackedScene" uid="uid://c8lfmcflrcsld" path="res://player.tscn" id="1_pghex"]
-[ext_resource type="PackedScene" uid="uid://ck5vka8knf5en" path="res://skillshot.tscn" id="2_ja6sp"]
+[ext_resource type="PackedScene" uid="uid://d36d8erofqqi6" path="res://player.tscn" id="1_pghex"]
+[ext_resource type="PackedScene" path="res://skillshot.tscn" id="2_ja6sp"]
 
 [sub_resource type="GDScript" id="GDScript_fwfer"]
 script/source = "extends Node2D
