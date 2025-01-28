@@ -1,0 +1,111 @@
+[gd_scene load_steps=10 format=4 uid="uid://d1fdplshirsgf"]
+
+[ext_resource type="Texture2D" uid="uid://faxynxdopgbx" path="res://characterSprite.png" id="1_1rdnc"]
+[ext_resource type="Texture2D" uid="uid://c32ihkuvkmvxq" path="res://Ground.png" id="2_jpvk3"]
+[ext_resource type="Texture2D" uid="uid://bgp6drspc5mn2" path="res://tilesets/walls/walls.png" id="3_r8uvi"]
+
+[sub_resource type="GDScript" id="GDScript_na5p1"]
+script/source = "extends CharacterBody2D
+
+@export var speed = 400
+
+func get_input():
+	var input_direction = Input.get_vector(\"left\", \"right\", \"up\", \"down\")
+	velocity = input_direction * speed
+
+func _physics_process(delta):
+	get_input()
+	move_and_slide()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ngdqf"]
+size = Vector2(36, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ubt68"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1rdnc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1tm15"]
+size = Vector2(165, 20)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cd6y2"]
+texture = ExtResource("3_r8uvi")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_fajle"]
+terrain_set_0/mode = 1
+sources/1 = SubResource("TileSetAtlasSource_cd6y2")
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+motion_mode = 1
+script = SubResource("GDScript_na5p1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(0, 15)
+shape = SubResource("RectangleShape2D_ngdqf")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
+position = Vector2(0.5, 1)
+scale = Vector2(0.289063, 0.289063)
+sprite_frames = SubResource("SpriteFrames_ubt68")
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(0, 54)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_1tm15")
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D/CollisionShape2D"]
+position = Vector2(1.19209e-07, 0)
+scale = Vector2(1.28906, 0.15625)
+texture = ExtResource("2_jpvk3")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="ParallaxBackground/ParallaxLayer"]
+tile_map_data = PackedByteArray("AAAEAAIAAQADAAQAAAADAAIAAQACAAQAAAACAAIAAQACAAQAAAABAAIAAQACAAQAAAAAAAIAAQACAAQAAAD//wIAAQACAAQAAAD+/wIAAQACAAQAAAD9/wIAAQACAAQAAAD8/wIAAQACAAQAAAD7/wIAAQACAAQAAAD6/wIAAQACAAQAAAD5/wIAAQABAAQAAAADAAEAAQACAAQAAAACAAEAAQACAAQAAAABAAEAAQACAAQAAAAAAAEAAQACAAQAAAD//wEAAQACAAQAAAD+/wEAAQACAAQAAAD9/wEAAQACAAQAAAD8/wEAAQACAAQAAAD7/wEAAQACAAQAAAD6/wEAAQACAAQAAAD6/wAAAQACAAQAAAD7/wAAAQACAAQAAAD8/wAAAQACAAQAAAD9/wAAAQACAAQAAAD+/wAAAQACAAQAAAD//wAAAQACAAQAAAAAAAAAAQACAAQAAAABAAAAAQACAAQAAAACAAAAAQACAAQAAAACAP//AQACAAQAAAABAP//AQACAAQAAAAAAP//AQACAAQAAAD/////AQACAAQAAAD+////AQACAAQAAAD9////AQACAAQAAAD8////AQACAAQAAAD7////AQACAAQAAAD6////AQACAAQAAAADAP//AQACAAQAAAADAAAAAQACAAQAAAAEAAEAAQADAAQAAAAEAAAAAQADAAQAAAAEAP//AQADAAQAAAD5/wEAAQABAAQAAAD5/wAAAQABAAQAAAD5////AQABAAQAAAA=")
+tile_set = SubResource("TileSet_fajle")
