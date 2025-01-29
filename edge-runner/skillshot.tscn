@@ -1,6 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://bmc1chmkmd245"]
+[gd_scene load_steps=13 format=3 uid="uid://bmc1chmkmd245"]
 
 [ext_resource type="Texture2D" uid="uid://mdund1lng8me" path="res://arrow.png" id="1_1i412"]
+[ext_resource type="Texture2D" uid="uid://c0weub1iy42g5" path="res://arrow2.png" id="2_a687f"]
+[ext_resource type="Texture2D" uid="uid://ch5bm2b7irsgy" path="res://arrow3.png" id="3_yjb4f"]
+[ext_resource type="Texture2D" uid="uid://ch1g3l1md4cup" path="res://toxicload2.png" id="4_pwosm"]
+[ext_resource type="Texture2D" uid="uid://d3thsrxevcfny" path="res://toxicload3.png" id="5_83rnh"]
+[ext_resource type="Texture2D" uid="uid://dmca7wdc3xbqn" path="res://toxicload.png" id="6_r717l"]
+[ext_resource type="Texture2D" uid="uid://bsx8tihxc4235" path="res://fireball2.png" id="7_hfnva"]
+[ext_resource type="Texture2D" uid="uid://q358b05ll3lo" path="res://fireball3.png" id="8_5hnhq"]
+[ext_resource type="Texture2D" uid="uid://cykdkhxqeoftx" path="res://fireball.png" id="9_v0vhb"]
 
 [sub_resource type="GDScript" id="GDScript_5lfrh"]
 script/source = "extends RigidBody2D
@@ -16,7 +24,7 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 
 
 func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
-	pass # Replace with function body.
+	queue_free()
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4sve5"]
@@ -24,6 +32,12 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_1i412")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_a687f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_yjb4f")
 }],
 "loop": true,
 "name": &"fly",
@@ -31,7 +45,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_1i412")
+"texture": ExtResource("4_pwosm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_83rnh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_r717l")
 }],
 "loop": true,
 "name": &"swim",
@@ -39,7 +59,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_1i412")
+"texture": ExtResource("7_hfnva")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_5hnhq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_v0vhb")
 }],
 "loop": true,
 "name": &"walk",
@@ -56,7 +82,7 @@ script = SubResource("GDScript_5lfrh")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-9, -8)
 sprite_frames = SubResource("SpriteFrames_4sve5")
-animation = &"fly"
+animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1jnx8")

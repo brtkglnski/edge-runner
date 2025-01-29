@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dojgkitpq1ml1"]
+[gd_scene load_steps=8 format=3 uid="uid://dojgkitpq1ml1"]
 
 [ext_resource type="PackedScene" uid="uid://c8lfmcflrcsld" path="res://player.tscn" id="1_pghex"]
 [ext_resource type="PackedScene" uid="uid://bmc1chmkmd245" path="res://skillshot.tscn" id="2_ja6sp"]
 [ext_resource type="PackedScene" uid="uid://bmn4a64c8kcss" path="res://hud.tscn" id="3_j6dnk"]
 [ext_resource type="AudioStream" uid="uid://dl2b8m11ij73b" path="res://bgMusic.mp3" id="4_swiqs"]
+[ext_resource type="Texture2D" uid="uid://dp81nlq710xnv" path="res://background.png" id="5_l3rlp"]
 
 [sub_resource type="GDScript" id="GDScript_fwfer"]
 script/source = "extends Node2D
@@ -22,6 +23,8 @@ func game_over():
 	$HUD.show_game_over()
 
 func new_game():
+	bulletSpeedMin = 150
+	bulletSpeedMax = 250
 	score = 0
 	get_tree().call_group(\"skillshots\", \"queue_free\")
 	$Player.start($StartPosition.position)
@@ -82,6 +85,14 @@ point_count = 6
 script = SubResource("GDScript_fwfer")
 mob = ExtResource("2_ja6sp")
 
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(1280, 720)
+offset_left = -57.0
+offset_top = -32.0
+offset_right = 1223.0
+offset_bottom = 688.0
+texture = ExtResource("5_l3rlp")
+
 [node name="Player" parent="." instance=ExtResource("1_pghex")]
 
 [node name="StartPosition" type="Marker2D" parent="."]
@@ -107,11 +118,6 @@ curve = SubResource("Curve2D_rj2s4")
 stream = ExtResource("4_swiqs")
 autoplay = true
 parameters/looping = true
-
-[node name="TextureRect" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(1280, 720)
-offset_right = 40.0
-offset_bottom = 40.0
 
 [connection signal="hit" from="Player" to="." method="game_over"]
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
